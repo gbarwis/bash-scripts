@@ -1,5 +1,23 @@
 #!/bin/bash
 
+#####################################################################################
+# This script will delete all cached files on a Perforce Proxy server that are older
+# than a configurable number of days.
+#
+# To use the script, first make a copy of the file `p4proxy-cache-clean.env.sample` 
+# as `p4proxy-cache-clean.env` and then edit that .env file to suit your environment.
+#
+# Command-line syntax:
+#
+# p4proxy-cache-clean.sh {-p|--purge | -t|--test} {-r|--report | -n|--noreport}
+# 
+#   -p, --purge      Take full action, deleting all files.
+#   -t, --test       Delete no files, but display what would happen.
+#   -r, --report     Send the notification as configured (email, AWS SNS, etc.).
+#   -n, --noreport   Send no notification, but display and log the results.
+# 
+#####################################################################################
+
 # Source external configuration variables to populate the relevant variables.
 # Be sure to modify p4proxy-cache-clean.env to suit your environment.
 #   Variables include:

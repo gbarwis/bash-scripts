@@ -1,6 +1,6 @@
 # Bash Scripts
 
-A collection of Bash scripts that I've written, tweaked, or borrowed. Mostly unrelated to each other, they serve a variety of purposes, from server maintenance to automation of small but useful functions.
+A collection of Bash scripts that I've written, tweaked, or borrowed. Mostly unrelated, they're intended for a variety of tasks, from server maintenance to minor automation.
 
 ## Contents
 
@@ -21,7 +21,7 @@ Each script will include its own usage information as a comment at the top of th
 
 ## Contributing
 
-These scripts are provided as-is, but if you have suggestions, improvements, or notice any issues, please do open an issue or submit a pull request. Contributions and constructive feedback are always welcome!
+These scripts are provided as-is, but if you have suggestions, improvements, or notice any issues, please do open an issue or submit a pull request. I welcome contributions and feedback.
 
 ## Disclaimer
 
@@ -33,4 +33,4 @@ This collection is licensed under the MIT License, allowing for both personal an
 
 ---
 
-Thanks for visiting this repository! I hope you find some of these scripts useful. If you find them primitive, I apologize - I'm always learning, so I'm sure that every one of these could be better.
+Thanks for visiting this repository! I hope you find some of these scripts useful. If you find them primitive, I apologize. I'm always learning, so I'm sure that every one of these could be better... and hopefully, over time, they will be.
