@@ -46,7 +46,7 @@ The script uses an environment file (`p4proxy-cache-clean.env`) to load the foll
 - **`DAYS_OLD`**: The number of days after which files should be considered for deletion.
 - **`P4P_DIR`**: The path to the Perforce proxy cache directory.
 - **`LOG_FILE`**: The path to the log file where the script records its actions.
-- **`HOST_LOCATION`**: A description of the host server's location (e.g., "Austin Office").
+- **`HOST_LOCATION`**: A description of the host server's location (e.g., "Narnia").
 - **`AWS_ACCOUNT`**: The AWS account ID used for SNS notifications.
 - **`AWS_SNS_TOPIC_NAME`**: The name of the SNS topic used for notifications.
 - **`AWS_SNS_REGION`**: The AWS region where the SNS topic is located.
