@@ -25,6 +25,9 @@
 #     P4P_DIR (path)
 #     LOG_FILE (path)
 #     HOST_LOCATION (geographic place)
+#     AWS_ACCOUNT
+#     AWS_SNS_TOPIC_NAME
+#     AWS_SNS_REGION
 source ./p4proxy-cache-clean.env
 
 # Locally-defined configuration variables
