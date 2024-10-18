@@ -133,7 +133,7 @@ elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
     log_with_timestamp "TEST RUN (REPORT ONLY): ============== Beginning file deletion ==============" | tee -a "$LOG_FILE"
     log_with_timestamp "TEST RUN (REPORT ONLY): Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more." | tee -a "$LOG_FILE"
-    log_with_timestamp "The following files would be deleted:"
+    log_with_timestamp "TEST RUN (REPORT ONLY): The following files would be deleted:"
     TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {printf "%.1fG", sum / 1024 / 1024}')
     find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | tee -a "$LOG_FILE"
     log_with_timestamp "TEST RUN (REPORT ONLY): Would delete $TEMP_DELETE_SIZE of files" | tee -a "$LOG_FILE"
@@ -150,12 +150,12 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     ENDING_TOTAL_GB=$(du -sh --block-size=G "$P4P_DIR" | cut -f1 | sed 's/G//g')
     DELETED_FILES=$((STARTING_TOTAL_FILES - ENDING_TOTAL_FILES))
     FREED_SPACE=$(echo "$STARTING_TOTAL_GB - $ENDING_TOTAL_GB" | bc)
-    log_with_timestamp "$(echo $DELETED_FILES | awk '{printf "%'''d\n", $1}') files deleted from $P4P_DIR/, freeing $(echo $FREED_SPACE | awk '{printf "%'''d\n", $1 + 0.5}') GB of space."
+    log_with_timestamp "$(echo $DELETED_FILES | awk '{printf "%'\''d\n", $1}') files deleted from $P4P_DIR/, freeing $(echo $FREED_SPACE | awk '{printf "%'\''d\n", $1 + 0.5}') GB of space."
 else
     # Test mode
     SIMULATED_DELETED_FILES=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | wc -l)
     SIMULATED_FREED_SPACE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {print sum / 1024 / 1024}')
-    log_with_timestamp "TEST RUN (REPORT ONLY): $(echo $SIMULATED_DELETED_FILES | awk '{printf "%'''d\n", $1}') files would be deleted from $P4P_DIR/, freeing $(echo $SIMULATED_FREED_SPACE | awk '{printf "%.1f\n", $1}') GB of space."
+    log_with_timestamp "TEST RUN (REPORT ONLY): $(echo $SIMULATED_DELETED_FILES | awk '{printf "%'\''d\n", $1}') files would be deleted from $P4P_DIR/, freeing $(echo $SIMULATED_FREED_SPACE | awk '{printf "%.1f\n", $1}') GB of space."
 fi
 
 # Ending info about percentage use
