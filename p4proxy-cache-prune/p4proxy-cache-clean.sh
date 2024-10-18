@@ -131,6 +131,11 @@ elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
     echo "TEST RUN (REPORT ONLY): ============== Beginning file deletion ==============" | tee -a "$LOG_FILE"
     echo "TEST RUN (REPORT ONLY): Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more." | tee -a "$LOG_FILE"
+
+    TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {printf "%.1fG", sum / 1024 / 1024}')
+    find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | tee -a "$LOG_FILE"
+
+
     TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | tee -a "$LOG_FILE"  | tee >(awk '{sum += $1} END {printf "%.1fG\n", sum / 1024 / 1024}') | awk '{print}')
     echo "TEST RUN (REPORT ONLY): Would delete $TEMP_DELETE_SIZE of files" | tee -a "$LOG_FILE"
     echo "TEST RUN (REPORT ONLY): Would also delete $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
@@ -172,7 +177,7 @@ else
     # Test mode - Simulated ending state
     SIMULATED_REMAINING_FILES=$((STARTING_TOTAL_FILES - SIMULATED_DELETED_FILES))
     SIMULATED_REMAINING_GB=$(echo "$STARTING_TOTAL_GB - $SIMULATED_FREED_SPACE" | bc)
-    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ would have $(echo $SIMULATED_REMAINING_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $SIMULATED_REMAINING_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup (simulated).""
+    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ would have $(echo $SIMULATED_REMAINING_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $SIMULATED_REMAINING_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup (simulated)."
 fi
 
 # Sending the results via SNS
