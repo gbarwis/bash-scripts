@@ -140,7 +140,7 @@ elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     log_with_timestamp "TEST RUN (REPORT ONLY): Would also delete $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
 else
     display_usage
-fi
+fi 
 
 # Action results
 log_with_timestamp "================== Script Results ==================="
