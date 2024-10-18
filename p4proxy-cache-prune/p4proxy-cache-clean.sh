@@ -123,22 +123,21 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     # Purge mode
     log_with_timestamp "============== Beginning file deletion =============="
     log_with_timestamp "Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more."
+    log_with_timestamp "The following files were deleted:"
+    find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD >> "$LOG_FILE"
     find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec rm -f {} \; 2>> "$LOG_FILE"
     log_with_timestamp "Deleting $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
     rm -f $P4P_DIR/pdb.lbr
 
 elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
-    echo "TEST RUN (REPORT ONLY): ============== Beginning file deletion ==============" | tee -a "$LOG_FILE"
-    echo "TEST RUN (REPORT ONLY): Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more." | tee -a "$LOG_FILE"
-
+    log_with_timestamp "TEST RUN (REPORT ONLY): ============== Beginning file deletion ==============" | tee -a "$LOG_FILE"
+    log_with_timestamp "TEST RUN (REPORT ONLY): Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more." | tee -a "$LOG_FILE"
+    log_with_timestamp "The following files would be deleted:"
     TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {printf "%.1fG", sum / 1024 / 1024}')
     find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | tee -a "$LOG_FILE"
-
-
-    TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | tee -a "$LOG_FILE"  | tee >(awk '{sum += $1} END {printf "%.1fG\n", sum / 1024 / 1024}') | awk '{print}')
-    echo "TEST RUN (REPORT ONLY): Would delete $TEMP_DELETE_SIZE of files" | tee -a "$LOG_FILE"
-    echo "TEST RUN (REPORT ONLY): Would also delete $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
+    log_with_timestamp "TEST RUN (REPORT ONLY): Would delete $TEMP_DELETE_SIZE of files" | tee -a "$LOG_FILE"
+    log_with_timestamp "TEST RUN (REPORT ONLY): Would also delete $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
 else
     display_usage
 fi
