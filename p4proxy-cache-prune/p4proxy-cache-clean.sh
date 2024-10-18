@@ -95,6 +95,7 @@ fi
 # Calculate starting percentage utilization and total volume size
 STARTING_USAGE=$(df -h "$P4P_DIR" | awk 'NR==2{print $5}')
 TOTAL_VOLUME_SIZE=$(df -h "$P4P_DIR" | awk 'NR==2{print $2}')
+TOTAL_VOLUME_SIZE_GB=$(df -BG "$P4P_DIR" | awk 'NR==2 {gsub("G",""); print $2}')
 if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     # Purge mode
     log_with_timestamp "$P4P_DIR/, a $TOTAL_VOLUME_SIZE volume, is $STARTING_USAGE used before cleanup."
@@ -165,7 +166,7 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
 else
     # Test mode - Simulated ending usage
     SIMULATED_ENDING_GB=$(echo "$STARTING_TOTAL_GB - $SIMULATED_FREED_SPACE" | bc)
-    SIMULATED_ENDING_USAGE=$(awk -v total="$TOTAL_VOLUME_SIZE" -v used="$SIMULATED_ENDING_GB" 'BEGIN { printf "%.1f%%", (used / total) * 100 }')
+    SIMULATED_ENDING_USAGE=$(awk -v total="$TOTAL_VOLUME_SIZE_GB" -v used="$SIMULATED_ENDING_GB" 'BEGIN { printf "%.1f%%", (used / total) * 100 }')
     log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/, a $TOTAL_VOLUME_SIZE volume, would be $SIMULATED_ENDING_USAGE used after cleanup."
 fi
 
