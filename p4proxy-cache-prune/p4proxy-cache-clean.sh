@@ -134,10 +134,10 @@ STARTING_TOTAL_FILES=$(find "$P4P_DIR" -type f | wc -l)
 STARTING_TOTAL_GB=$(du -sh --block-size=G "$P4P_DIR" | cut -f1 | sed 's/G//g')
 if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     # Purge mode
-    log_with_timestamp "$P4P_DIR/ has $(echo $STARTING_TOTAL_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $STARTING_TOTAL_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB before cleanup."
+    log_with_timestamp "$P4P_DIR/ has $(echo "$STARTING_TOTAL_FILES" | awk '{printf "%'\''d\n", $1}') files consuming $(echo "$STARTING_TOTAL_GB" | awk '{printf "%'\''d\n", $1 + 0.5}') GB before cleanup."
 elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
-    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ has $(echo $STARTING_TOTAL_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $STARTING_TOTAL_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB before cleanup."
+    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ has $(echo "$STARTING_TOTAL_FILES" | awk '{printf "%'\''d\n", $1}') files consuming $(echo "$STARTING_TOTAL_GB" | awk '{printf "%'\''d\n", $1 + 0.5}') GB before cleanup."
 else
     display_usage
 fi
@@ -148,18 +148,18 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     log_with_timestamp "============== Beginning file deletion =============="
     log_with_timestamp "Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more."
     log_with_timestamp "The following files were deleted:"
-    find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD >> "$LOG_FILE"
-    find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec rm -f {} \; 2>> "$LOG_FILE"
+    find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" >> "$LOG_FILE"
+    find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" -exec rm -f {} \; 2>> "$LOG_FILE"
     log_with_timestamp "Deleting $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
-    rm -f $P4P_DIR/pdb.lbr
+    rm -f "$P4P_DIR/pdb.lbr"
 
 elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
     log_with_timestamp "TEST RUN (REPORT ONLY): ============== Beginning file deletion =============="
     log_with_timestamp "TEST RUN (REPORT ONLY): Deleting files from $P4P_DIR not accessed for $DAYS_OLD days or more."
     log_with_timestamp "TEST RUN (REPORT ONLY): The following files would be deleted:"
-    TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {printf "%.1fG", sum / 1024 / 1024}')
-    find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | tee -a "$LOG_FILE"
+    TEMP_DELETE_SIZE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" -exec du -k {} + | awk '{sum += $1} END {printf "%.1fG", sum / 1024 / 1024}')
+    find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" | tee -a "$LOG_FILE"
     log_with_timestamp "TEST RUN (REPORT ONLY): Would delete $TEMP_DELETE_SIZE of files"
     log_with_timestamp "TEST RUN (REPORT ONLY): Would also delete $P4P_DIR/pdb.lbr to avoid transfer scheduling conflicts."
 else
@@ -174,12 +174,12 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     ENDING_TOTAL_GB=$(du -sh --block-size=G "$P4P_DIR" | cut -f1 | sed 's/G//g')
     DELETED_FILES=$((STARTING_TOTAL_FILES - ENDING_TOTAL_FILES))
     FREED_SPACE=$(echo "$STARTING_TOTAL_GB - $ENDING_TOTAL_GB" | bc)
-    log_with_timestamp "$(echo $DELETED_FILES | awk '{printf "%'\''d\n", $1}') files deleted from $P4P_DIR/, freeing $(echo $FREED_SPACE | awk '{printf "%'\''d\n", $1 + 0.5}') GB of space."
+    log_with_timestamp "$(echo "$DELETED_FILES" | awk '{printf "%'\''d\n", $1}') files deleted from $P4P_DIR/, freeing $(echo "$FREED_SPACE" | awk '{printf "%'\''d\n", $1 + 0.5}') GB of space."
 else
     # Test mode
-    SIMULATED_DELETED_FILES=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD | wc -l)
-    SIMULATED_FREED_SPACE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +$DAYS_OLD -exec du -k {} + | awk '{sum += $1} END {print sum / 1024 / 1024}')
-    log_with_timestamp "TEST RUN (REPORT ONLY): $(echo $SIMULATED_DELETED_FILES | awk '{printf "%'\''d\n", $1}') files would be deleted from $P4P_DIR/, freeing $(echo $SIMULATED_FREED_SPACE | awk '{printf "%.1f\n", $1}') GB of space."
+    SIMULATED_DELETED_FILES=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" | wc -l)
+    SIMULATED_FREED_SPACE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" -exec du -k {} + | awk '{sum += $1} END {print sum / 1024 / 1024}')
+    log_with_timestamp "TEST RUN (REPORT ONLY): $(echo "$SIMULATED_DELETED_FILES" | awk '{printf "%'\''d\n", $1}') files would be deleted from $P4P_DIR/, freeing $(echo "$SIMULATED_FREED_SPACE" | awk '{printf "%.1f\n", $1}') GB of space."
 fi
 
 # Ending info about percentage use
@@ -195,12 +195,12 @@ fi
 
 # Ending info about actual use
 if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
-    log_with_timestamp "$P4P_DIR/ has $(echo $ENDING_TOTAL_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $ENDING_TOTAL_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup."
+    log_with_timestamp "$P4P_DIR/ has $(echo "$ENDING_TOTAL_FILES" | awk '{printf "%'\''d\n", $1}') files consuming $(echo "$ENDING_TOTAL_GB" | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup."
 else
     # Test mode - Simulated ending state
     SIMULATED_REMAINING_FILES=$((STARTING_TOTAL_FILES - SIMULATED_DELETED_FILES))
     SIMULATED_REMAINING_GB=$(echo "$STARTING_TOTAL_GB - $SIMULATED_FREED_SPACE" | bc)
-    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ would have $(echo $SIMULATED_REMAINING_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo $SIMULATED_REMAINING_GB | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup (simulated)."
+    log_with_timestamp "TEST RUN (REPORT ONLY): $P4P_DIR/ would have $(echo $SIMULATED_REMAINING_FILES | awk '{printf "%'\''d\n", $1}') files consuming $(echo "$SIMULATED_REMAINING_GB" | awk '{printf "%'\''d\n", $1 + 0.5}') GB after cleanup (simulated)."
 fi
 
 # Sending the results via SNS
