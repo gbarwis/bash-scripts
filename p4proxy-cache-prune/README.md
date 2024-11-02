@@ -37,7 +37,7 @@ To perform a full cleanup and suppress notifications:
 
 - **AWS Configuration**: The script uses the AWS CLI to send reports via AWS SNS. If you want to use this reporting feature, you must have both of these configured and working.
 - **Perforce Proxy Server**: This script is intended to be run on a Perforce proxy server to clean up old cached files.
-- **Environment File**: The script sources configuration variables from an environment file (`p4proxy-cache-clean.env`). Make sure to provide and configure this file appropriately. A sample file is provided (`p4proxy-cache-clean.env`).
+- **Environment File**: The script sources configuration variables from an environment file (`p4proxy-cache-clean.env`). Make sure to provide and configure this file appropriately. A sample file is provided (`p4proxy-cache-clean.env.sample`).
 
 ## Environment Variables
 
