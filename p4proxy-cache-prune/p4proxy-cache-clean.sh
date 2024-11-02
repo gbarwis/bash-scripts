@@ -18,6 +18,9 @@
 # 
 #####################################################################################
 
+# Determine the directory of the script itself, to find the configuration file
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Source external configuration variables to populate the relevant variables.
 # Be sure to modify p4proxy-cache-clean.env to suit your environment.
 #   Variables include:
@@ -28,7 +31,7 @@
 #     AWS_ACCOUNT
 #     AWS_SNS_TOPIC_NAME
 #     AWS_SNS_REGION
-source ./p4proxy-cache-clean.env
+source "$SCRIPT_DIR/p4proxy-cache-clean.env"
 
 # Locally-defined configuration variables
 SCRIPT_PATH="$(realpath "$0")"
