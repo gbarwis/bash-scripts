@@ -181,7 +181,7 @@ if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
 else
     # Test mode
     SIMULATED_DELETED_FILES=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" | wc -l)
-    SIMULATED_FREED_SPACE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" -exec du -k {} + | awk '{sum += $1} END {print sum / 1024 / 1024}')
+    SIMULATED_FREED_SPACE=$(find "$P4P_DIR" -mindepth 2 -type f -atime +"$DAYS_OLD" -exec du -k {} + | awk '{sum += $1} END {printf "%.6f\n", sum / 1024 / 1024}')
     log_with_timestamp "TEST RUN (REPORT ONLY): $(echo "$SIMULATED_DELETED_FILES" | awk '{printf "%'\''d\n", $1}') files would be deleted from $P4P_DIR/, freeing $(echo "$SIMULATED_FREED_SPACE" | awk '{printf "%.1f\n", $1}') GB of space."
 fi
 
