@@ -22,4 +22,4 @@ Use these scripts at your own risk. Always make sure you understand what a scrip
 
 ## License
 
-This collection is licensed under the MIT License. Please see the LICENSE file for more details.
+This collection is licensed under the BSD 2-Clause License. Please see the LICENSE file for more details.
