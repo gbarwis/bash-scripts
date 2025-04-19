@@ -1,5 +1,8 @@
 #!/bin/bash
-
+#
+# SPDX-License-Identifier: BSD-2-Clause
+# Copyright (c) 2024–2025 Greg Barwis
+#
 #####################################################################################
 # This script will delete all cached files on a Perforce Proxy server that are older
 # than a configurable number of days.
@@ -31,6 +34,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #     AWS_ACCOUNT
 #     AWS_SNS_TOPIC_NAME
 #     AWS_SNS_REGION
+# Disabling the warning about a sourced file not specified as input via shellcheck -x
+# shellcheck disable=SC1091
 source "$SCRIPT_DIR/p4proxy-cache-clean.env"
 
 # Locally-defined configuration variables
