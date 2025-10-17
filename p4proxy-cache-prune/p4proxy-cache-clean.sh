@@ -75,24 +75,25 @@ fi
 
 # Compress the previous log file (if it exists)
 if [ -f "$LOG_FILE" ]; then
-    mv "$LOG_FILE" "${LOG_FILE}_$(date '+%Y%m%d%H%M%S').log"
-    gzip "${LOG_FILE}_$(date '+%Y%m%d%H%M%S').log"
+    LOG_TIMESTAMP=$(date '+%Y%m%d%H%M%S')
+    mv "$LOG_FILE" "${LOG_FILE}_${LOG_TIMESTAMP}.log"
+    gzip "${LOG_FILE}_${LOG_TIMESTAMP}.log"
 fi
 
 # Begin script logging
 if [[ "$1" == "-p" || "$1" == "--purge" ]]; then
     # Purge mode
     log_with_timestamp "====================================================="
-    log_with_timestamp "== Beginning Perforce Proxy cache cleanup on $HOSTNAME",
-    log_with_timestamp "== the P4Proxy server in $HOST_LOCATION".
+    log_with_timestamp "== Beginning Perforce Proxy cache cleanup on $HOSTNAME,"
+    log_with_timestamp "== the P4Proxy server in $HOST_LOCATION."
     log_with_timestamp "== This script lives on that host, in the location"
     log_with_timestamp "== ($SCRIPT_PATH)."
     log_with_timestamp "====================================================="
 elif [[ "$1" == "-t" || "$1" == "--test" ]]; then
     # Test mode
     log_with_timestamp "TEST RUN (REPORT ONLY): ====================================================="
-    log_with_timestamp "TEST RUN (REPORT ONLY): == Beginning Perforce Proxy cache cleanup on $HOSTNAME",
-    log_with_timestamp "TEST RUN (REPORT ONLY): == the P4Proxy server in $HOST_LOCATION".
+    log_with_timestamp "TEST RUN (REPORT ONLY): == Beginning Perforce Proxy cache cleanup on $HOSTNAME,"
+    log_with_timestamp "TEST RUN (REPORT ONLY): == the P4Proxy server in $HOST_LOCATION."
     log_with_timestamp "TEST RUN (REPORT ONLY): == This script lives on that host, in the location"
     log_with_timestamp "TEST RUN (REPORT ONLY): == ($SCRIPT_PATH)."
     log_with_timestamp "TEST RUN (REPORT ONLY): ====================================================="
